@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -34,7 +35,7 @@ public class ScannerActivity extends AppCompatActivity {
     ImageView capture;
     TextView textView;
     Button snapButton,detectButton;
-    static final int REQUEST_IMAGE_CAPTURE=1;
+    static final int REQUEST_IMAGE_CAPTURE=100;
     Bitmap bitmap;
     @Override
     protected void onCreate (Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class ScannerActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,new String[]{CAMERA},PERMISSION_CODE);
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private void captureImage(){
         Intent takePicture=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePicture.resolveActivity(getPackageManager())!=null){
@@ -82,15 +84,12 @@ public class ScannerActivity extends AppCompatActivity {
             }
         }
     }
-
     @Override
     protected void onActivityResult (int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-         if(requestCode == REQUEST_IMAGE_CAPTURE && requestCode==RESULT_OK){
-            Bundle extras=data.getExtras();
-            bitmap=(Bitmap) extras.get("data");
-            capture.setImageBitmap(bitmap);
-         }
+        Bundle extras=data.getExtras();
+        bitmap=(Bitmap) extras.get("data");
+        capture.setImageBitmap(bitmap);
     }
 
     private void detectText (){
