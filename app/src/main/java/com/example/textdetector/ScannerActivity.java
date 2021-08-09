@@ -1,11 +1,5 @@
 package com.example.textdetector;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,8 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
@@ -49,8 +47,8 @@ public class ScannerActivity extends AppCompatActivity {
                 requestPermissions();
             }
         });
-        detectButton.setOnClickListener(v->{
-            detectText();
+        detectButton.setOnClickListener(v-> {
+                detectText();
         });
     }
 
@@ -84,14 +82,16 @@ public class ScannerActivity extends AppCompatActivity {
             }
         }
     }
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onActivityResult (int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bundle extras=data.getExtras();
         bitmap=(Bitmap) extras.get("data");
-        capture.setImageBitmap(bitmap);
+            capture.setImageBitmap(bitmap);
     }
 
+    @SuppressLint("SetTextI18n")
     private void detectText (){
         InputImage image= InputImage.fromBitmap(bitmap,0);
         TextRecognizer recognizer= TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
@@ -114,12 +114,7 @@ public class ScannerActivity extends AppCompatActivity {
                 }
             }
 
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure (@NonNull Exception e) {
-                Toast.makeText(ScannerActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        }).addOnFailureListener(e -> Toast.makeText(ScannerActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show());
     }
 
     private void initViews (){
